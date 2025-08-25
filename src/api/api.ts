@@ -4,7 +4,7 @@ const GEMINI_API = "AIzaSyAwO3sta_PspCOsuzBlEi8DloZ6A2XUstQ";
 
 const genAI = new GoogleGenerativeAI(GEMINI_API);
 
-const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 const randomWords = [
   "Energy",
