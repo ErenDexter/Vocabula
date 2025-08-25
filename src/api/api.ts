@@ -57,38 +57,75 @@ export const getWords = async (
   let prompt = "";
   if (customTopic) {
     if (customTopicPrompt === "") {
-      prompt = `Give ${wordsCount} words on random topics containing from 3 to 8 letters.`;
+      prompt = `Only give ${wordsCount} words on random topics containing from 3 to 8 letters.`;
     } else {
-      prompt = `Give ${wordsCount} words on ${customTopicPrompt} containing from 3 to 8 letters.`;
+      prompt = `Only give ${wordsCount} words on ${customTopicPrompt} containing from 3 to 8 letters.`;
     }
   } else {
     if (customLetterCount) {
       if (customRarity) {
-        prompt = `Give ${wordsCount} ${wordsRarity} words containing only ${lettersCount} letters. Letter count is a hard rule.`;
+        prompt = `Only give ${wordsCount} ${wordsRarity} words containing only ${lettersCount} letters. Letter count is a hard rule.`;
       } else {
-        prompt = `Give ${wordsCount} words containing only ${lettersCount} letters. Letter count is a hard rule.`;
+        prompt = `Only give ${wordsCount} words containing only ${lettersCount} letters. Letter count is a hard rule.`;
         console.log(lettersCount);
       }
     } else {
       if (customRarity) {
-        prompt = `Give ${wordsCount} ${wordsRarity} words containing 3 to 8 letters.`;
+        prompt = `Only give ${wordsCount} ${wordsRarity} words containing 3 to 8 letters.`;
       } else {
-        prompt = `Give ${wordsCount} words containing 5 to 8 letters.`;
+        prompt = `Only give ${wordsCount} words containing 5 to 8 letters.`;
       }
     }
   }
 
   const result = await model.generateContent(prompt);
+  console.log(result);
   const response = await result.response;
   const text = response.text();
-  const textArr = text.split("\n");
-  const filteredTextArr = textArr.map((el) => {
-    let element = el.split(" ")[1];
-    if (element.length <= 8) return element;
-    else {
-      return randomWords[getRandomIntInclusive(0, randomWords.length)];
-    }
-  });
 
-  return filteredTextArr;
+  console.log(text);
+
+  if (!text || typeof text !== "string") {
+    console.warn("AI response is empty or invalid, using fallback words");
+    return randomWords.slice(0, Math.min(wordsCount, randomWords.length));
+  }
+
+  const textArr = text.split(/[,\n]/);
+  const filteredTextArr = textArr
+    .map((el) => {
+      try {
+        if (!el || !el.trim()) return null;
+
+        let cleanElement = el
+          .trim()
+          .replace(/^\d+\.?\s*/, "")
+          .replace(/^\s*[-•]\s*/, "")
+          .trim();
+
+        if (!cleanElement) return null;
+
+        cleanElement = cleanElement.replace(/[^\w]/g, "");
+
+        if (cleanElement.length > 0 && cleanElement.length <= 8) {
+          return cleanElement;
+        } else {
+          return randomWords[getRandomIntInclusive(0, randomWords.length - 1)];
+        }
+      } catch (error) {
+        console.warn("Error processing element:", el, error);
+        return null;
+      }
+    })
+    .filter((word) => word !== null);
+
+  if (filteredTextArr.length < wordsCount) {
+    const needed = wordsCount - filteredTextArr.length;
+    for (let i = 0; i < needed; i++) {
+      filteredTextArr.push(
+        randomWords[getRandomIntInclusive(0, randomWords.length - 1)]
+      );
+    }
+  }
+
+  return filteredTextArr.slice(0, wordsCount);
 };
