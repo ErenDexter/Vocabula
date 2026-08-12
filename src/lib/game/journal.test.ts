@@ -87,7 +87,7 @@ describe("load", () => {
     expect(data.bestQuick).toBe(500);
     expect(data.lexicon).toEqual({});
     expect(data.streak).toEqual({ current: 0, best: 0, lastDaily: null });
-    expect(data.settings).toEqual({ sound: false });
+    expect(data.settings).toEqual({ sound: true });
   });
 
   it("round-trips through save", () => {
@@ -213,10 +213,15 @@ describe("reviewCandidates", () => {
 });
 
 describe("settings", () => {
-  it("defaults sound off and persists a change", () => {
-    expect(getSettings().sound).toBe(false);
-    setSettings({ sound: true });
+  it("defaults sound on and persists a change", () => {
     expect(getSettings().sound).toBe(true);
+    setSettings({ sound: false });
+    expect(getSettings().sound).toBe(false);
+  });
+
+  it("keeps a stored choice rather than reapplying the default", () => {
+    storage.set("vocabula:v1", JSON.stringify({ v: 1, settings: { sound: false } }));
+    expect(getSettings().sound).toBe(false);
   });
 });
 

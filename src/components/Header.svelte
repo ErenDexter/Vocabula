@@ -1,10 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { page } from "$app/stores";
+  import Credit from "./Credit.svelte";
   import * as sfx from "../lib/game/sfx";
   import { getSettings, setSettings } from "../lib/game/journal";
 
-  let sound = false;
+  // Matches the stored default so the button does not flash 🔇 before onMount.
+  let sound = true;
 
   onMount(() => {
     sound = getSettings().sound;
@@ -24,7 +26,8 @@
 
 <header class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-5 pt-2">
   <div class="flex items-center gap-3">
-    <a href="/" class="flex select-none no-underline" aria-label="Vocabula home">
+    <!-- `bg-none` kills PaperCSS's squiggle; `no-underline` alone does not. -->
+    <a href="/" class="flex select-none bg-none no-underline" aria-label="Vocabula home">
       <span class="text-3xl">Vocabul</span>
       <span class="text-3xl" class:animate-bounce={onHome}>a</span>
     </a>
@@ -44,7 +47,7 @@
         href="https://github.com/ErenDexter/Vocabula"
         target="_blank"
         rel="noreferrer"
-        class="paper-btn btn-small btn-outline inline-flex items-center no-underline"
+        class="paper-btn btn-small btn-outline !inline-flex items-center no-underline"
         title="Source on GitHub"
         aria-label="Source on GitHub"
       >
@@ -66,8 +69,7 @@
     </nav>
   </div>
 
-  <p class="ml-auto text-xs text-gray-500">
-    Made with 💙 by
-    <a href="https://www.linkedin.com/in/rdprangon/">Prangon</a>
-  </p>
+  <!-- Below `sm` this would eat two lines at the top of the screen, so the
+       layout renders it as a footer there instead. -->
+  <Credit class="ml-auto hidden text-right sm:block" />
 </header>

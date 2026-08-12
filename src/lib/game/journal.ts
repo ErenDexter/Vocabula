@@ -44,7 +44,7 @@ export function emptyJournal(): JournalData {
     daily: {},
     streak: { current: 0, best: 0, lastDaily: null },
     bestQuick: 0,
-    settings: { sound: false },
+    settings: { sound: true },
   };
 }
 

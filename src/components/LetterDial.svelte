@@ -114,7 +114,8 @@
     on:click={() => dispatch("reset")}
     disabled={locked}
     aria-label="Clear the letters you have placed"
-    class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full p-0 px-[7px] text-xl font-extrabold"
+    style="transform: translate(-50%, -50%)"
+    class="absolute left-1/2 top-1/2 rounded-full p-0 px-[7px] text-xl font-extrabold"
     >⟳</button
   >
 
@@ -125,8 +126,9 @@
       aria-label={`Letter ${letter.char}`}
       aria-pressed={letter.placed}
       on:keydown={(event) => onKeyDown(event, letter.id)}
-      style="left: {positions[i].x * 100}%; top: {positions[i].y * 100}%"
-      class="{letterSize} absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer border-none bg-transparent p-0 font-extrabold leading-none shadow-none transition-all duration-300 ease-in-out"
+      style="left: {positions[i].x * 100}%; top: {positions[i]
+        .y * 100}%; transform: translate(-50%, -50%)"
+      class="{letterSize} absolute cursor-pointer border-none bg-transparent p-0 font-extrabold leading-none shadow-none transition-all duration-300 ease-in-out"
       class:text-gray-400={!letter.placed}
       class:opacity-40={letter.placed}
       class:cursor-default={letter.placed}

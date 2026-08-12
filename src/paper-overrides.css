@@ -1,0 +1,58 @@
+/* Fixes layered on top of PaperCSS. Imported after paper.css in +layout.svelte
+   so these win on source order — do not move it before that import, and do not
+   fold it back into app.pcss (Tailwind's preflight has to stay *ahead* of
+   PaperCSS or it strips heading sizes, link colours and list styling). */
+
+/* PaperCSS presses every button down 2px on hover and swings its drop shadow
+   from 15/28/25px to 2/8/8px over 235ms. At the top of the page that repaints a
+   wide band under the header and reads as the whole screen jiggling. Keep the
+   hand-drawn look, drop the motion. */
+button,
+.paper-btn,
+[type="button"] {
+  --btn-shadow: 4px 7px 10px -7px rgba(0, 0, 0, 0.22);
+  box-shadow: var(--btn-shadow);
+  /* Never `all` — nothing geometric should be animatable. */
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+button.btn-small,
+.paper-btn.btn-small,
+[type="button"].btn-small {
+  --btn-shadow: 3px 5px 8px -6px rgba(0, 0, 0, 0.22);
+  box-shadow: var(--btn-shadow);
+}
+
+/* Tint the background rather than using `filter`: a filter promotes the button
+   to its own compositing layer, which drops subpixel antialiasing and makes the
+   label look like it shifts. Buttons holding an icon or emoji hide it; ones with
+   real text (Daily, Lexicon) do not. */
+button:hover,
+.paper-btn:hover,
+[type="button"]:hover {
+  transform: none;
+  box-shadow: var(--btn-shadow);
+  background-color: var(--primary-shaded-70);
+}
+
+button:active,
+.paper-btn:active,
+[type="button"]:active {
+  transform: none;
+  box-shadow: var(--btn-shadow);
+  background-color: var(--primary-shaded-50);
+}
+
+/* The tint above is less specific than PaperCSS's .btn-secondary background,
+   so the active-route button needs its own pair or it gets no hover feedback. */
+button.btn-secondary:hover,
+.paper-btn.btn-secondary:hover,
+[type="button"].btn-secondary:hover {
+  background-color: #c4e0fc;
+}
+
+button.btn-secondary:active,
+.paper-btn.btn-secondary:active,
+[type="button"].btn-secondary:active {
+  background-color: #a7d3fa;
+}

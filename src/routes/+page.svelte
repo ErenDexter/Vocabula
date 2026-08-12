@@ -95,7 +95,7 @@
 </script>
 
 <svelte:head>
-  <title>Vocabula — learn five new words in five minutes</title>
+  <title>Vocabula - learn five new words in five minutes</title>
   <meta
     name="description"
     content="A quick hand-drawn word game. Unscramble words, learn what they mean, and keep a daily streak."
@@ -109,10 +109,10 @@
 {:else}
   <div class="flex flex-col px-4 lg:mt-16 lg:flex-row lg:gap-16 lg:px-10" transition:fade>
     <div class="lg:ml-10 lg:w-2/5 lg:px-0">
-      <h1 class="text-5xl lg:text-6xl">
+      <h1 class="mt-6 text-5xl lg:text-6xl">
         It will take less than 5 minutes to learn 5 new words!
       </h1>
-      <h4 class="-mt-6 px-0.5 text-xl lg:text-2xl">
+      <h4 class="mt-6 px-0.5 text-xl lg:text-2xl">
         Expand Your Lexicon: A Quick Vocabulary Boost with Five New Words in Under Five
         Minutes. Elevate Your Language Skills Effortlessly!
       </h4>

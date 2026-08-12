@@ -1,15 +1,20 @@
 /**
  * Every sound here is synthesised at runtime. No audio files ship with the game,
  * which keeps the bundle asset-free and matches the pencil-and-paper feel.
- * Off by default; the player turns it on from the header.
+ * On by default; the player turns it off from the header.
  */
 
 let ctx: AudioContext | null = null;
-let enabled = false;
+let enabled = true;
 
+/**
+ * Flag only — deliberately does not touch the AudioContext. Since sound is on by
+ * default this runs at page load, and constructing a context outside a user
+ * gesture leaves it suspended and logs an autoplay warning. The context is built
+ * lazily by the first actual sound, which always follows a click or keypress.
+ */
 export function setEnabled(value: boolean): void {
   enabled = value;
-  if (value) ensureContext();
 }
 
 export function isEnabled(): boolean {
